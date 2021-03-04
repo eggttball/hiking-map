@@ -129,9 +129,15 @@ GPXParser.prototype.createMarker = function(point) {
             "<figcaption></figcaption>" +
         "</figure>";
 
+    const iconImage = {
+        url: 'images/char-egg-s.png',
+        size: new google.maps.Size(32, 38),
+    };
+
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat,lon),
-        map: this.map
+        map: this.map,
+        icon: iconImage
     });
 
     var infowindow = new google.maps.InfoWindow({
