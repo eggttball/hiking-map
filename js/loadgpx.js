@@ -125,7 +125,7 @@ GPXParser.prototype.createMarker = function(point) {
         "時間：" + time + "<br /><hr />" +
         desc +
         "<figure>" +
-            "<img src='/images/" + img + "' alt='Elephant at sunset'>" +
+            "<img src='images/" + img + "' alt=''>" +
             "<figcaption></figcaption>" +
         "</figure>";
 
