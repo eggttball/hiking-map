@@ -73,7 +73,7 @@ GPXParser.prototype.setMinTrackPointDelta = function(delta) {
 
 GPXParser.prototype.translateName = function(name) {
     if(name == "wpt") {
-        return "Waypoint";
+        return "方位點";
     }
     else if(name == "trkpt") {
         return "Track Point";
@@ -87,36 +87,41 @@ GPXParser.prototype.translateName = function(name) {
 GPXParser.prototype.createMarker = function(point) {
     var lon = parseFloat(point.getAttribute("lon"));
     var lat = parseFloat(point.getAttribute("lat"));
-    var html = "";
+    var name, desc, ele, time;
 
-    var pointElements = point.getElementsByTagName("html");
-    if(pointElements.length > 0) {
-        for(i = 0; i < pointElements.item(0).childNodes.length; i++) {
-            html += pointElements.item(0).childNodes[i].nodeValue;
-        }
-    }
-    else {
-        // Create the html if it does not exist in the point.
-        html = "<b>" + this.translateName(point.nodeName) + "</b><br>";
-        var attributes = point.attributes;
-        var attrlen = attributes.length;
-        for(i = 0; i < attrlen; i++) {
-            html += attributes.item(i).name + " = " +
-                    attributes.item(i).nodeValue + "<br>";
-        }
-
-        if(point.hasChildNodes) {
-            var children = point.childNodes;
-            var childrenlen = children.length;
-            for(i = 0; i < childrenlen; i++) {
-                // Ignore empty nodes
-                if(children[i].nodeType != 1) continue;
-                if(children[i].firstChild == null) continue;
-                html += children[i].nodeName + " = " +
-                        children[i].firstChild.nodeValue + "<br>";
+    if(point.hasChildNodes) {
+        var children = point.childNodes;
+        var childrenlen = children.length;
+        for(i = 0; i < childrenlen; i++) {
+            // Ignore empty nodes
+            if(children[i].nodeType != 1) continue;
+            if(children[i].firstChild == null) continue;
+            switch (children[i].nodeName) {
+                case 'name':
+                    name = children[i].firstChild.nodeValue;
+                    break;
+                case 'desc':
+                    desc = children[i].firstChild.nodeValue;
+                    break;
+                case 'ele':
+                    ele = children[i].firstChild.nodeValue;
+                    break;
+                case 'time':
+                    time = children[i].firstChild.nodeValue;
+                    break;
+                default:
+                    break;
             }
         }
     }
+
+    var html =
+        "方位點：" + name + "<br />" +
+        "緯度：" + lat + "<br />" +
+        "經度：" + lon + "<br />" +
+        "高程：" + ele + "<br />" +
+        "時間：" + time + "<br /><hr />" +
+        desc;
 
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat,lon),
