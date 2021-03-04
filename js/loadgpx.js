@@ -87,7 +87,7 @@ GPXParser.prototype.translateName = function(name) {
 GPXParser.prototype.createMarker = function(point) {
     var lon = parseFloat(point.getAttribute("lon"));
     var lat = parseFloat(point.getAttribute("lat"));
-    var name, desc, ele, time;
+    var name, desc, ele, time, img;
 
     if(point.hasChildNodes) {
         var children = point.childNodes;
@@ -109,6 +109,8 @@ GPXParser.prototype.createMarker = function(point) {
                 case 'time':
                     time = children[i].firstChild.nodeValue;
                     break;
+                case 'img':
+                    img = children[i].firstChild.nodeValue;
                 default:
                     break;
             }
@@ -121,7 +123,11 @@ GPXParser.prototype.createMarker = function(point) {
         "經度：" + lon + "<br />" +
         "高程：" + ele + "<br />" +
         "時間：" + time + "<br /><hr />" +
-        desc;
+        desc +
+        "<figure>" +
+            "<img src='/images/" + img + "' alt='Elephant at sunset'>" +
+            "<figcaption></figcaption>" +
+        "</figure>";
 
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(lat,lon),
